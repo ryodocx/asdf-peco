@@ -24,7 +24,7 @@ case "$(uname -s)" in
 "Linux")
     DOWNLOADURL="https://github.com/${github_user}/${github_repo}/releases/download/v${ASDF_INSTALL_VERSION}/peco_linux_amd64.tar.gz"
     curl -fL -o "${downloadPath}/peco.tar.gz" "${DOWNLOADURL}"
-    tar xzf peco_linux_amd64.tar.gz
+    tar xzf peco.tar.gz
     mv ./peco_linux_amd64/peco "${toolPath}"
     ;;
 esac
