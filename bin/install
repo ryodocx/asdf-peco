@@ -1,0 +1,33 @@
+#!/usr/bin/env bash
+set -e
+
+. $(dirname $0)/util
+checkDependencies
+
+# check ASDK environment variables
+[ -n "$ASDF_INSTALL_VERSION" ] || (echo 'Missing ASDF_INSTALL_VERSION' >&2 && exit 1)
+[ -n "$ASDF_INSTALL_PATH" ] || (echo 'Missing ASDF_INSTALL_PATH' >&2 && exit 1)
+
+# install
+mkdir -p "${ASDF_INSTALL_PATH}/bin"
+toolPath="${ASDF_INSTALL_PATH}/bin/${toolname}"
+downloadPath="$(mktemp -d)"
+cd "${downloadPath}"
+
+case "$(uname -s)" in
+"Darwin")
+    DOWNLOADURL="https://github.com/${github_user}/${github_repo}/releases/download/v${ASDF_INSTALL_VERSION}/peco_darwin_amd64.zip"
+    curl -fL -o "${downloadPath}/peco.zip" "${DOWNLOADURL}"
+    unzip -q peco.zip
+    mv ./peco_darwin_amd64/peco "${toolPath}"
+    ;;
+"Linux")
+    DOWNLOADURL="https://github.com/${github_user}/${github_repo}/releases/download/v${ASDF_INSTALL_VERSION}/peco_linux_amd64.tar.gz"
+    curl -fL -o "${downloadPath}/peco.tar.gz" "${DOWNLOADURL}"
+    tar xzf peco_linux_amd64.tar.gz
+    mv ./peco_linux_amd64/peco "${toolPath}"
+    ;;
+esac
+
+chmod +x "${toolPath}"
+rm -rf "${downloadPath}"

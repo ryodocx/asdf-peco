@@ -1,0 +1,19 @@
+#!/usr/bin/env bash
+
+toolname=peco
+github_user=peco
+github_repo=peco
+required_commands="curl sed tar unzip mktemp"
+
+checkDependencies() {
+    local flag=0
+    for cmd in ${required_commands}; do
+        if ! type ${cmd} &>/dev/null; then
+            echo "required: ${cmd}"
+            flag=1
+        fi
+    done
+    if [ ${flag} = 1 ]; then
+        exit 1
+    fi
+}
